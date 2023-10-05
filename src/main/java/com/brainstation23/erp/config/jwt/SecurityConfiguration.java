@@ -25,7 +25,11 @@ public class SecurityConfiguration {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-//                .antMatchers(HttpMethod.GET,"/api/users").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/users").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/organizations").hasAnyAuthority("ADMIN","EMPLOYEE")
+                .antMatchers(HttpMethod.POST,"/api/organizations").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/organizations").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/organizations").hasAnyAuthority("ADMIN")
                 .antMatchers("/","/api/login", "/api/signup", "/swagger-ui/**",
                 "/javainuse-openapi/**", "/v3/api-docs", "/v3/api-docs/**", "/v2/api-docs",
                 "/swagger-resources", "/swagger-resources/**", "configuration/ui", "/configuration/security",
