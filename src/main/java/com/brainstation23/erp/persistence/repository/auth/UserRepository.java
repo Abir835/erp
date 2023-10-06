@@ -1,6 +1,6 @@
 package com.brainstation23.erp.persistence.repository.auth;
 
-import com.brainstation23.erp.model.dto.UserDTO;
+import com.brainstation23.erp.model.dto.UserResponse;
 import com.brainstation23.erp.persistence.entity.auth.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +12,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
 
 
-    @Query(value = "select new com.brainstation23.erp.model.dto.UserDTO(firstname, lastname, email, role) from User")
-    List<UserDTO> getAllUser();
+    @Query(value = "select new com.brainstation23.erp.model.dto.UserResponse(firstname, lastname, email, role) from User")
+    List<UserResponse> getAllUser();
 }

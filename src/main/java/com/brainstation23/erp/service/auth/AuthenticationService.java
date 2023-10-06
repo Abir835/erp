@@ -1,10 +1,11 @@
 package com.brainstation23.erp.service.auth;
 
-import com.brainstation23.erp.model.dto.UserDTO;
+import com.brainstation23.erp.mapper.UserMapper;
+import com.brainstation23.erp.model.domain.UserDomain;
+import com.brainstation23.erp.model.dto.UserResponse;
 import com.brainstation23.erp.model.dto.auth.AuthenticationRequest;
 import com.brainstation23.erp.model.dto.auth.AuthenticationResponse;
 import com.brainstation23.erp.model.dto.auth.RegisterRequest;
-import com.brainstation23.erp.persistence.entity.auth.Role;
 import com.brainstation23.erp.persistence.entity.auth.User;
 import com.brainstation23.erp.persistence.entity.token.Tokens;
 import com.brainstation23.erp.persistence.entity.token.TokenType;
@@ -12,6 +13,8 @@ import com.brainstation23.erp.persistence.repository.auth.UserRepository;
 import com.brainstation23.erp.persistence.repository.token.TokenRepository;
 import com.brainstation23.erp.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +30,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     public AuthenticationResponse register(RegisterRequest request){
         var user = User.builder()
@@ -85,8 +89,13 @@ public class AuthenticationService {
     }
 
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return repository.getAllUser();
+    }
+
+    public Page<UserDomain> getAll(Pageable pageable) {
+        var entities = repository.findAll(pageable);
+        return entities.map(userMapper::entityToDomain);
     }
 }
 

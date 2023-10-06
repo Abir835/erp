@@ -26,6 +26,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/api/users").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/get-all-user").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/organizations").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .antMatchers(HttpMethod.POST,"/api/organizations").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/api/organizations").hasAnyAuthority("ADMIN")
