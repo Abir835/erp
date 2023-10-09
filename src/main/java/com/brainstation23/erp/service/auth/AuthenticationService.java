@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -79,6 +80,10 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
+    public void saveUserTokenBypass(User user, String jwtToken){
+        saveUserToken(user, jwtToken);
+    }
+
     private void saveUserToken(User user, String jwtToken) {
         var token = Tokens.builder()
                 .user(user)
@@ -118,6 +123,7 @@ public class AuthenticationService {
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         repository.save(user);
+
         return UserResponseUpdate.builder()
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
