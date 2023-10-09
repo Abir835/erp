@@ -46,7 +46,7 @@ public class EmployeeService {
                 .build();
         employeeRepository.save(employee);
         var subject = "Send user Information";
-        var body = "email: "+ DEFAULT_PASSWORD + " password: "+ user.getPassword();
+        var body = "email: "+ employee.getEmail() + " password: "+ DEFAULT_PASSWORD;
         emailService.SendMail(employee.getEmail(),subject,body);
         return EmployeeResponse
                 .builder()
