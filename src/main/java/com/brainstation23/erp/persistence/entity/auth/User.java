@@ -1,4 +1,5 @@
 package com.brainstation23.erp.persistence.entity.auth;
+import com.brainstation23.erp.persistence.entity.Employee;
 import com.brainstation23.erp.persistence.entity.token.Tokens;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +38,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Role role;
+
+    @OneToOne(mappedBy = "user")
+    private Employee employee;
 
     @OneToMany(mappedBy = "user")
     private List<Tokens> tokensList;
