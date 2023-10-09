@@ -7,7 +7,7 @@ As a Guest user, I can
 - view homepage
 - Sign Up to be an employee with minimal information
 
-As an Admin user, I can
+As an Admin user, I can -- Done
 - Log in
 - VIEW & EDIT my profile info (first name, last name...)
 - CRUD Users
@@ -16,7 +16,7 @@ As an Admin user, I can
 - CRUD Employees
 - Log out
 
-As an Employee user, I can
+As an Employee user, I can -- Done
 - Log in
 - VIEW & EDIT my profile info (first name, last name...)
 - VIEW My Account Balance
@@ -36,7 +36,7 @@ As an Employee user, I can
    - [ ] /roles
    - [ ] /organizations
    - [ ] /employees
-- [ ] REST API
+- [X] REST API
    - [X] /api/login (JWT)
    - [X] /api/signup (public)
    - [X] /api/users (secured, authorized to ADMIN only)

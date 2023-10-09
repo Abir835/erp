@@ -37,6 +37,8 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.PUT,"/api/employee/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/employee/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/employee").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/employee/get/{id}").hasAnyAuthority("EMPLOYEE")
+                .antMatchers(HttpMethod.PUT,"/api/employee/update/{id}").hasAnyAuthority("EMPLOYEE")
                 .antMatchers("/","/api/login", "/api/signup", "/swagger-ui/**",
                 "/javainuse-openapi/**", "/v3/api-docs", "/v3/api-docs/**", "/v2/api-docs",
                 "/swagger-resources", "/swagger-resources/**", "configuration/ui", "/configuration/security",
