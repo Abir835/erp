@@ -131,8 +131,7 @@ public class EmployeeService {
 
         assert current_user != null;
         assert getUser != null;
-        if (current_user.getId().equals(getUser.getId())){
-            var employee_id = employeeRepository.findByEmail(current_user.getEmail());
+        if (current_user.getId().equals(getUser.getId()) && getUser.getRole().equals(Role.EMPLOYEE)){
             getUser.setFirstname(request.getFirstname());
             getUser.setLastname(request.getLastname());
             userRepository.save(getUser);
@@ -146,7 +145,7 @@ public class EmployeeService {
                     .firstname(current_user.getFirstname())
                     .lastname(current_user.getLastname())
                     .email(current_user.getEmail())
-                    .balance(employee_id.get().getBalance())
+                    .balance(getUser.getEmployee().getBalance())
                     .build();
         }
         else{
