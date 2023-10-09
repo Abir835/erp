@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,16 +15,27 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USERS")
+@Table(
+        name = "USERS",
+        uniqueConstraints = @UniqueConstraint(
+                name = "email_unique",
+                columnNames = "email"
+        )
+)
 public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Integer id;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
+    @NotNull
     private String email;
+    @NotNull
     private String password;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Role role;
 
     @OneToMany(mappedBy = "user")
