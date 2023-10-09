@@ -12,8 +12,11 @@ import com.brainstation23.erp.persistence.repository.auth.UserRepository;
 import com.brainstation23.erp.service.auth.AuthenticationService;
 import com.brainstation23.erp.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -100,5 +103,54 @@ public class EmployeeService {
         userRepository.deleteById(user.getId());
         employeeRepository.deleteById(employee.getId());
         return "Delete Successfully";
+    }
+
+    public EmployeeResponse getEmployeeCurrent(Integer id, String userName) {
+        var current_user = userRepository.findByEmail(userName).orElse(null);
+        var getUser = userRepository.findById(id).orElse(null);
+
+        assert current_user != null;
+        assert getUser != null;
+        if (current_user.getId().equals(getUser.getId()) && getUser.getRole().equals(Role.EMPLOYEE)){
+            return EmployeeResponse
+                    .builder()
+                    .firstname(current_user.getFirstname())
+                    .lastname(current_user.getLastname())
+                    .email(current_user.getEmail())
+                    .balance(getUser.getEmployee().getBalance())
+                    .build();
+        }
+        else{
+           return EmployeeResponse.builder().build();
+        }
+    }
+
+    public EmployeeResponse updateEmployeeCurrent(Integer id, String userName, EmployeeUpdateRequest request) {
+        var current_user = userRepository.findByEmail(userName).orElse(null);
+        var getUser = userRepository.findById(id).orElse(null);
+
+        assert current_user != null;
+        assert getUser != null;
+        if (current_user.getId().equals(getUser.getId())){
+            var employee_id = employeeRepository.findByEmail(current_user.getEmail());
+            getUser.setFirstname(request.getFirstname());
+            getUser.setLastname(request.getLastname());
+            userRepository.save(getUser);
+
+            getUser.getEmployee().setFirstname(request.getFirstname());
+            getUser.getEmployee().setLastname(request.getLastname());
+            employeeRepository.save(getUser.getEmployee());
+
+            return EmployeeResponse
+                    .builder()
+                    .firstname(current_user.getFirstname())
+                    .lastname(current_user.getLastname())
+                    .email(current_user.getEmail())
+                    .balance(employee_id.get().getBalance())
+                    .build();
+        }
+        else{
+            return EmployeeResponse.builder().build();
+        }
     }
 }

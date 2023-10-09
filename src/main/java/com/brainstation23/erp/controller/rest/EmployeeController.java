@@ -6,9 +6,14 @@ import com.brainstation23.erp.model.EmployeeUpdateRequest;
 import com.brainstation23.erp.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Past;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +38,18 @@ public class EmployeeController {
     @DeleteMapping("/employee/{id}")
     public String delete(@PathVariable Integer id){
         return employeeService.delete(id);
+    }
+
+    @GetMapping("/employee/get/{id}")
+    public ResponseEntity<EmployeeResponse> getEmployeeCurrent(@PathVariable Integer id, Authentication authentication){
+        var currentUserName = authentication.getName();
+        return ResponseEntity.ok(employeeService.getEmployeeCurrent(id, currentUserName));
+    }
+
+    @PutMapping("/employee/get/{id}")
+    public ResponseEntity<EmployeeResponse> updateEmployeeCurrent(@PathVariable Integer id, Authentication authentication, @RequestBody EmployeeUpdateRequest request){
+        var userName = authentication.getName();
+        return ResponseEntity.ok(employeeService.updateEmployeeCurrent(id, userName, request));
     }
 
 }
