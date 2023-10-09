@@ -3,9 +3,11 @@ package com.brainstation23.erp.service.auth;
 import com.brainstation23.erp.mapper.UserMapper;
 import com.brainstation23.erp.model.domain.UserDomain;
 import com.brainstation23.erp.model.dto.UserResponse;
+import com.brainstation23.erp.model.dto.UserResponseUpdate;
 import com.brainstation23.erp.model.dto.auth.AuthenticationRequest;
 import com.brainstation23.erp.model.dto.auth.AuthenticationResponse;
 import com.brainstation23.erp.model.dto.auth.RegisterRequest;
+import com.brainstation23.erp.model.dto.UserRequestUpdate;
 import com.brainstation23.erp.persistence.entity.auth.User;
 import com.brainstation23.erp.persistence.entity.token.Tokens;
 import com.brainstation23.erp.persistence.entity.token.TokenType;
@@ -96,6 +98,32 @@ public class AuthenticationService {
     public Page<UserDomain> getAll(Pageable pageable) {
         var entities = repository.findAll(pageable);
         return entities.map(userMapper::entityToDomain);
+    }
+
+    public UserResponse get_user(Integer id) {
+        var user = repository.findById(id).orElse(null);
+        assert user != null;
+        return UserResponse
+                .builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .role(user.getRole())
+                .email(user.getEmail())
+                .build();
+    }
+
+    public UserResponseUpdate update_user(UserRequestUpdate request, Integer id){
+        var user = repository.findById(id).orElse(null);
+        assert user != null;
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+        repository.save(user);
+        return UserResponseUpdate.builder()
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .role(user.getRole())
+                .email(user.getEmail())
+                .build();
     }
 }
 
