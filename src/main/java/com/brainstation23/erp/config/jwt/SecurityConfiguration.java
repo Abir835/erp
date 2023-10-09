@@ -25,6 +25,8 @@ public class SecurityConfiguration {
         http.csrf()
                 .disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET,"/api/get-user/{id}").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/update-user/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/users").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/get-all-user").hasAnyAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/organizations").hasAnyAuthority("ADMIN","EMPLOYEE")
@@ -45,7 +47,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
-                .logoutUrl("/api/v1/auth/logout")
+                .logoutUrl("/api/logout")
                 .addLogoutHandler(logoutHandler)
                 .logoutSuccessHandler(((request, response, authentication) ->
                         SecurityContextHolder.clearContext()));
