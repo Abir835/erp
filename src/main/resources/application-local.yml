@@ -10,9 +10,9 @@
 ##
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/erp_java
-    username: abir1
-    password: Abir@123
+    url: jdbc:postgresql://localhost:5432/
+    username: 
+    password: 
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
