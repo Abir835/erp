@@ -1,4 +1,4 @@
-package com.brainstation23.erp.controller;
+package com.brainstation23.erp.controller.rest;
 
 import com.brainstation23.erp.model.EmployeeRequest;
 import com.brainstation23.erp.model.EmployeeResponse;
