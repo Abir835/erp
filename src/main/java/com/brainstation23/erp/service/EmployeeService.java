@@ -3,6 +3,7 @@ package com.brainstation23.erp.service;
 
 import com.brainstation23.erp.model.EmployeeRequest;
 import com.brainstation23.erp.model.EmployeeResponse;
+import com.brainstation23.erp.model.EmployeeUpdateRequest;
 import com.brainstation23.erp.persistence.entity.Employee;
 import com.brainstation23.erp.persistence.entity.auth.Role;
 import com.brainstation23.erp.persistence.entity.auth.User;
@@ -55,5 +56,49 @@ public class EmployeeService {
                 .email(employee.getEmail())
                 .balance(employee.getBalance())
                 .build();
+    }
+
+    public EmployeeResponse getEmployee(Integer id) {
+        var employee = employeeRepository.findById(id).orElse(null);
+        assert employee != null;
+        return EmployeeResponse
+                .builder()
+                .firstname(employee.getFirstname())
+                .lastname(employee.getLastname())
+                .email(employee.getEmail())
+                .balance(employee.getBalance())
+                .build();
+    }
+
+    public EmployeeResponse updateEmployee(Integer id, EmployeeUpdateRequest request) {
+        var employee = employeeRepository.findById(id).orElse(null);
+        assert employee != null;
+        var user = userRepository.findById(employee.getUser().getId()).orElse(null);
+        assert user != null;
+        user.setFirstname(request.getFirstname());
+        user.setLastname(request.getLastname());
+        userRepository.save(user);
+
+        employee.setFirstname(request.getFirstname());
+        employee.setLastname(request.getLastname());
+        employee.setBalance(request.getBalance());
+        employeeRepository.save(employee);
+
+        return EmployeeResponse
+                .builder()
+                .firstname(employee.getFirstname())
+                .lastname(employee.getLastname())
+                .email(employee.getEmail())
+                .balance(employee.getBalance())
+                .build();
+    }
+
+    public String delete(Integer id) {
+        var employee = employeeRepository.findById(id).orElse(null);
+        assert employee != null;
+        var user = userRepository.findById(employee.getUser().getId()).orElse(null);
+        userRepository.deleteById(user.getId());
+        employeeRepository.deleteById(employee.getId());
+        return "Delete Successfully";
     }
 }
