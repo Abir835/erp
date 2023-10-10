@@ -1,7 +1,7 @@
 spring:
   profiles: dev
   datasource:
-    url: jdbc:postgresql://dpg-ckig980mccbs738ohefg-a.oregon-postgres.render.com:5432/erp_database_render
+    url: jdbc:postgresql://dpg-ckig980mccbs738ohefg-a.oregon-postgres.render.com:5432/erp_database_render?user=erp_database_render_user&password=kraF6uilCMBlK8PE7uNZPqDP6S6PKzGp
     username: erp_database_render_user
     password: kraF6uilCMBlK8PE7uNZPqDP6S6PKzGp
     driver-class-name: org.postgresql.Driver
