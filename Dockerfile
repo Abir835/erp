@@ -1,15 +1,13 @@
 #
 # Build stage
 #
-FROM maven:3.8.2-jdk-11 AS build
+FROM ubuntu:latest AS build
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
 COPY . .
-RUN mvn clean package -Pprod -DskipTests
+RUN ./gradlew bootJar --no-deamon
 
-#
-# Package stage
-#
-FROM openjdk:11-jdk-slim
-COPY --from=build /build/libs/erp-0.0.1-SNAPSHOT.jar erp.jar
-# ENV PORT=8080
+FROM openjdk:17-jdk-slim
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","erp.jar"]
+COPY --form=build /build/libs/erp-0.0.1-SNAPSHOT.jar erp.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
