@@ -8,8 +8,8 @@ RUN ./gradlew bootJar --no-daemon
 
 FROM openjdk:17-jdk-slim
 
-EXPOSE 8080
+EXPOSE 8000
 
 COPY --from=build /build/libs/erp-0.0.1-SNAPSHOT.jar erp.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "erp.jar"]
