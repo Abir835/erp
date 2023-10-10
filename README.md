@@ -51,7 +51,7 @@ As an Employee user, I can -- Done
 - [ ] Write Unit Test
 - [X] Setup different database driver in different profile
 - [ ] Upgrade to Spring Boot 3
-- [ ] Deployment (profile: develop)
+- [X] Deployment (profile: develop)
 - [X] Update Documentation (README.md)
 
 ## How to Build & Run
