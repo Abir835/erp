@@ -100,6 +100,7 @@ public class EmployeeService {
         var employee = employeeRepository.findById(id).orElse(null);
         assert employee != null;
         var user = userRepository.findById(employee.getUser().getId()).orElse(null);
+        assert user != null;
         userRepository.deleteById(user.getId());
         employeeRepository.deleteById(employee.getId());
         return "Delete Successfully";
@@ -107,7 +108,9 @@ public class EmployeeService {
 
     public EmployeeResponse getEmployeeCurrent(Integer id, String userName) {
         var current_user = userRepository.findByEmail(userName).orElse(null);
-        var getUser = userRepository.findById(id).orElse(null);
+        var employee = employeeRepository.findById(id).orElse(null);
+        assert employee != null;
+        var getUser = userRepository.findById(employee.getUser().getId()).orElse(null);
 
         assert current_user != null;
         assert getUser != null;
@@ -121,13 +124,17 @@ public class EmployeeService {
                     .build();
         }
         else{
-           return EmployeeResponse.builder().build();
+           return EmployeeResponse
+                   .builder()
+                   .build();
         }
     }
 
     public EmployeeResponse updateEmployeeCurrent(Integer id, String userName, EmployeeUpdateRequest request) {
         var current_user = userRepository.findByEmail(userName).orElse(null);
-        var getUser = userRepository.findById(id).orElse(null);
+        var employee = employeeRepository.findById(id).orElse(null);
+        assert employee != null;
+        var getUser = userRepository.findById(employee.getUser().getId()).orElse(null);
 
         assert current_user != null;
         assert getUser != null;
@@ -149,7 +156,9 @@ public class EmployeeService {
                     .build();
         }
         else{
-            return EmployeeResponse.builder().build();
+            return EmployeeResponse
+                    .builder()
+                    .build();
         }
     }
 }
