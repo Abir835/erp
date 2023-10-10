@@ -1,5 +1,4 @@
 spring:
-  profiles: mail
   mail:
     default-encoding: UTF-8
     host: smtp.gmail.com
