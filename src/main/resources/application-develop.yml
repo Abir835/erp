@@ -1,0 +1,17 @@
+spring:
+  profiles: development
+  datasource:
+    url: jdbc:postgresql://dpg-ckig980mccbs738ohefg-a.oregon-postgres.render.com:5432/erp_database_render
+    username: erp_database_render_user
+    password: kraF6uilCMBlK8PE7uNZPqDP6S6PKzGp
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
