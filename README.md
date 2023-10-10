@@ -45,14 +45,14 @@ As an Employee user, I can -- Done
 - [x] API Doc: Swagger
 - [x] Mapper: Mapstruct
 - [x] Code Formatter: Spotless
-- [ ] Apply Spring Security
+- [X] Apply Spring Security
 - [ ] Global Exception Handler
 - [ ] Implement JPA Auditing
 - [ ] Write Unit Test
-- [ ] Setup different database driver in different profile
+- [X] Setup different database driver in different profile
 - [ ] Upgrade to Spring Boot 3
 - [ ] Deployment (profile: develop)
-- [ ] Update Documentation (README.md)
+- [X] Update Documentation (README.md)
 
 ## How to Build & Run
 1. Install Java 17 (LTS) of any distribution. You can try Amazon Corretto 17. You can find the installation instruction here: https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/what-is-corretto-17.html
