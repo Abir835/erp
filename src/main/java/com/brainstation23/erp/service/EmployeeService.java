@@ -52,7 +52,7 @@ public class EmployeeService {
         employeeRepository.save(employee);
         var subject = "Send user Information";
         var body = "email: "+ employee.getEmail() + " password: "+ DEFAULT_PASSWORD;
-        emailService.SendMail(employee.getEmail(),subject,body);
+//        emailService.SendMail(employee.getEmail(),subject,body);
         return EmployeeResponse
                 .builder()
                 .firstname(employee.getFirstname())
