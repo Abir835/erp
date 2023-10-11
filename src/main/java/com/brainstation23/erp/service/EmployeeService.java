@@ -1,6 +1,7 @@
 package com.brainstation23.erp.service;
 
 
+import com.brainstation23.erp.exception.custom.custom.AlreadyExistsException;
 import com.brainstation23.erp.exception.custom.custom.NotFoundException;
 import com.brainstation23.erp.model.EmployeeRequest;
 import com.brainstation23.erp.model.EmployeeResponse;
@@ -37,6 +38,10 @@ public class EmployeeService {
                 .password(passwordEncoder.encode(DEFAULT_PASSWORD))
                 .role(Role.EMPLOYEE)
                 .build();
+        var  userEmailAlreadyExists = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if(userEmailAlreadyExists != null){
+            throw new AlreadyExistsException("Already Exists Email");
+        }
         var userSaved = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         authenticationService.saveUserTokenBypass(userSaved, jwtToken);
@@ -64,7 +69,10 @@ public class EmployeeService {
 
     public EmployeeResponse getEmployee(Integer id) {
         var employee = employeeRepository.findById(id).orElse(null);
-        assert employee != null;
+//        assert employee != null;
+        if (employee == null){
+            throw new NotFoundException("Employee Not Found");
+        }
         return EmployeeResponse
                 .builder()
                 .firstname(employee.getFirstname())
@@ -76,9 +84,15 @@ public class EmployeeService {
 
     public EmployeeResponse updateEmployee(Integer id, EmployeeUpdateRequest request) {
         var employee = employeeRepository.findById(id).orElse(null);
-        assert employee != null;
+//        assert employee != null;
+        if (employee == null){
+            throw new NotFoundException("Employee Not Found");
+        }
         var user = userRepository.findById(employee.getUser().getId()).orElse(null);
-        assert user != null;
+        if (user == null){
+            throw new NotFoundException("User Not Found");
+        }
+//        assert user != null;
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         userRepository.save(user);
@@ -99,9 +113,15 @@ public class EmployeeService {
 
     public String delete(Integer id) {
         var employee = employeeRepository.findById(id).orElse(null);
-        assert employee != null;
+//        assert employee != null;
+        if (employee == null){
+            throw new NotFoundException("Employee Not Found");
+        }
         var user = userRepository.findById(employee.getUser().getId()).orElse(null);
-        assert user != null;
+//        assert user != null;
+        if (user == null){
+            throw new NotFoundException("Employee Not Found");
+        }
         userRepository.deleteById(user.getId());
         employeeRepository.deleteById(employee.getId());
         return "Delete Successfully";
@@ -110,11 +130,20 @@ public class EmployeeService {
     public EmployeeResponse getEmployeeCurrent(Integer id, String userName) {
         var current_user = userRepository.findByEmail(userName).orElse(null);
         var employee = employeeRepository.findById(id).orElse(null);
-        assert employee != null;
+//        assert employee != null;
+        if (employee == null){
+            throw new NotFoundException("Employee Not Found");
+        }
         var getUser = userRepository.findById(employee.getUser().getId()).orElse(null);
 
-        assert current_user != null;
-        assert getUser != null;
+//        assert current_user != null;
+        if (current_user == null){
+            throw new NotFoundException("User Not Found");
+        }
+//        assert getUser != null;
+        if (getUser == null){
+            throw new NotFoundException("User Not Found");
+        }
         if (current_user.getId().equals(getUser.getId()) && getUser.getRole().equals(Role.EMPLOYEE)){
             return EmployeeResponse
                     .builder()
@@ -125,20 +154,30 @@ public class EmployeeService {
                     .build();
         }
         else{
-           return EmployeeResponse
-                   .builder()
-                   .build();
+            throw new NotFoundException("Only see own data");
+//           return EmployeeResponse
+//                   .builder()
+//                   .build();
         }
     }
 
     public EmployeeResponse updateEmployeeCurrent(Integer id, String userName, EmployeeUpdateRequest request) {
         var current_user = userRepository.findByEmail(userName).orElse(null);
         var employee = employeeRepository.findById(id).orElse(null);
-        assert employee != null;
+//        assert employee != null;
+        if (employee == null){
+            throw new NotFoundException("User Not Found");
+        }
         var getUser = userRepository.findById(employee.getUser().getId()).orElse(null);
 
-        assert current_user != null;
-        assert getUser != null;
+//        assert current_user != null;
+        if (current_user == null){
+            throw new NotFoundException("User Not Found");
+        }
+//        assert getUser != null;
+        if (getUser == null){
+            throw new NotFoundException("User Not Found");
+        }
         if (current_user.getId().equals(getUser.getId()) && getUser.getRole().equals(Role.EMPLOYEE)){
             getUser.setFirstname(request.getFirstname());
             getUser.setLastname(request.getLastname());
@@ -157,9 +196,10 @@ public class EmployeeService {
                     .build();
         }
         else{
-            return EmployeeResponse
-                    .builder()
-                    .build();
+            throw new NotFoundException("Only update own data");
+//            return EmployeeResponse
+//                    .builder()
+//                    .build();
         }
     }
 }

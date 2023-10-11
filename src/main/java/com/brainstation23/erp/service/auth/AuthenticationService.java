@@ -1,5 +1,7 @@
 package com.brainstation23.erp.service.auth;
 
+import com.brainstation23.erp.exception.custom.custom.AlreadyExistsException;
+import com.brainstation23.erp.exception.custom.custom.NotFoundException;
 import com.brainstation23.erp.mapper.UserMapper;
 import com.brainstation23.erp.model.domain.UserDomain;
 import com.brainstation23.erp.model.dto.UserResponse;
@@ -17,11 +19,13 @@ import com.brainstation23.erp.service.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,6 +47,10 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+        var  userEmailAlreadyExists = repository.findByEmail(request.getEmail()).orElse(null);
+        if(userEmailAlreadyExists != null){
+            throw new AlreadyExistsException("Already Exists Email");
+        }
         var userSaved = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
 
@@ -107,7 +115,10 @@ public class AuthenticationService {
 
     public UserResponse get_user(Integer id) {
         var user = repository.findById(id).orElse(null);
-        assert user != null;
+//        assert user != null;
+        if (user == null){
+            throw new NotFoundException("User Not Found");
+        }
         return UserResponse
                 .builder()
                 .firstname(user.getFirstname())
@@ -119,7 +130,10 @@ public class AuthenticationService {
 
     public UserResponseUpdate update_user(UserRequestUpdate request, Integer id){
         var user = repository.findById(id).orElse(null);
-        assert user != null;
+//        assert user != null;
+        if (user == null){
+            throw new NotFoundException("User Not Found");
+        }
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         repository.save(user);
